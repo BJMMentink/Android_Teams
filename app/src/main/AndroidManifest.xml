@@ -13,6 +13,24 @@
         android:theme="@style/Theme.Teams"
         tools:targetApi="31">
         <activity
+            android:name=".TeamsSettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TeamsMapActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TeamsEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TeamsListActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
