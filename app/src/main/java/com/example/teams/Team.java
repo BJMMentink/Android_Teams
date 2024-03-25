@@ -5,12 +5,18 @@ public class Team {
     private String name;
     private String city;
     private String cellPhone;
-    private float rating;
+    private float  rating;
     private int imgId;
     private boolean isFavorite;
 
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -51,6 +57,7 @@ public class Team {
     public void setImgId(int imgId) {
         this.imgId = imgId;
     }
+
     public boolean isFavorite() {
         return isFavorite;
     }
@@ -58,15 +65,27 @@ public class Team {
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
     }
-    public Team(){
+
+    public Team()
+    {
+        this.id = -1;
         this.name = "";
         this.city = "";
         this.cellPhone = "";
-        this.rating = 0;
+        this.rating = 0.0f;
         this.imgId = 0;
         this.isFavorite = false;
     }
-    public Team(int id, String name, String city, String cellPhone, float rating, boolean isFavorite, int imgId){
+
+    public Team(int id,
+                String name,
+                String city,
+                String cellPhone,
+                float rating,
+                boolean isFavorite,
+                int imgId)
+    {
+        this.id = id;
         this.name = name;
         this.city = city;
         this.cellPhone = cellPhone;
@@ -74,15 +93,16 @@ public class Team {
         this.imgId = imgId;
         this.isFavorite = isFavorite;
     }
+
     @Override
-    public String toString(){
+    public String toString()
+    {
         return String.valueOf(id) + '|' +
                 name + '|' +
                 city + '|' +
                 cellPhone + '|' +
                 rating + '|' +
-                imgId + '|' +
-                isFavorite;
+                isFavorite + '|' +
+                imgId;
     }
-
 }

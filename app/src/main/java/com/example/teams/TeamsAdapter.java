@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,27 +21,30 @@ class  TeamsAdapter extends RecyclerView.Adapter {
 
     private Context parentContext;
 
-    public class ActorViewHolder extends RecyclerView.ViewHolder{
-        public TextView tvFirstName;
-        public TextView tvLastName;
+    public class TeamViewHolder extends RecyclerView.ViewHolder{
+        public TextView tvName;
+        public TextView tvCity;
+        public ImageButton imgButtonPhoto;
         //private View.OnClickListener onClickListener;
-        public ActorViewHolder(@NonNull View itemView) {
+        public TeamViewHolder(@NonNull View itemView) {
             super(itemView);
-            //tvFirstName = itemView.findViewById(R.id.tvFirstName);
-            //tvLastName = itemView.findViewById(R.id.tvLastName);
+            tvName = itemView.findViewById(R.id.tvName);
+            tvCity = itemView.findViewById(R.id.tvCity);
+            imgButtonPhoto = itemView.findViewById(R.id.imgPhoto);
             // Code involving with click an item in the list.
             itemView.setTag(this);
             itemView.setOnClickListener(onItemClickListener);
         }
 
-        public TextView getTvFirstName()
+        public TextView getName()
         {
-            return tvFirstName;
+            return tvName;
         }
-        public TextView getTvLastName()
+        public TextView getCity()
         {
-            return tvLastName;
+            return tvCity;
         }
+        public ImageButton getImgButtonPhoto(){ return imgButtonPhoto; }
 
     }
 
@@ -61,17 +65,17 @@ class  TeamsAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.complex_item_view, parent, false);
-        //return new ActorViewHolder(v);
-        return null;
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        return new TeamViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: " + teamData.get(position));
-        ActorViewHolder actorViewHolder = (ActorViewHolder) holder;
-        //actorViewHolder.getTvFirstName().setText(actorData.get(position).getFirstName());
-        //actorViewHolder.getTvLastName().setText(actorData.get(position).getLastName());
+        TeamViewHolder teamViewHolder = (TeamViewHolder) holder;
+        teamViewHolder.getName().setText(teamData.get(position).getName());
+        teamViewHolder.getCity().setText(teamData.get(position).getCity());
+        teamViewHolder.getImgButtonPhoto().setImageResource(teamData.get(position).getImgId());
 
     }
 
