@@ -14,4 +14,7 @@
     <string name="cell_phone">Cell Phone</string>
     <string name="rating">Rating</string>
     <string name="rate">Rate</string>
+    <string name="delete">Delete</string>
+    <string name="_100">100%</string>
+    <string name="newText">New</string>
 </resources>

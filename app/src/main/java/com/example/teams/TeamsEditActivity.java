@@ -37,6 +37,7 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
 
         if(teamId != -1)
         {
+            team.setId(teams.get(teams.size() - 1).getId() + 1);
             initTeam(teamId);
 
         }
@@ -53,6 +54,9 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
         initTextChanged(R.id.etName);
         initTextChanged(R.id.etCity);
         initTextChanged(R.id.editCell);
+
+        // get the teams
+        teams = TeamsListActivity.readTeams(this);
 
         setForEditing(false);
         Log.d(TAG, "onCreate: End");
@@ -125,8 +129,7 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
 
     private void initTeam(int teamId) {
 
-        // get the teams
-        teams = TeamsListActivity.readTeams(this);
+
         // get the team
         team = teams.get(teamId - 1);
         rebindTeam();

@@ -1,5 +1,6 @@
 package com.example.teams;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -7,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Button;
 
 import java.util.ArrayList;
 
@@ -29,8 +32,20 @@ public class TeamsListActivity extends AppCompatActivity {
             Log.d(TAG, "onClick: " + team.getId());
             startActivity(intent);
         }
-    };
 
+    };
+    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            Log.d(TAG, "onCheckedChanged: " + isChecked);
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) buttonView.getTag();
+            int position = viewHolder.getAdapterPosition();
+            teams.get(position).setFavorite(isChecked);
+
+            //teams.remove(teams.get(position));
+            FileIO.writeFile(TeamsListActivity.FILENAME, TeamsListActivity.this, createDataArray(teams));
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +61,39 @@ public class TeamsListActivity extends AppCompatActivity {
         if(teams.size() == 0)
             createTeams();
 
+        initDeleteSwitch();
+        initAddTeamButton();
+        
+
         RebindTeams();
     }
+
+    private void initDeleteSwitch() {
+        SwitchCompat switchDelete = findViewById(R.id.switchDelete);
+        switchDelete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d(TAG, "onCheckedChanged: " + isChecked);
+                teamsAdapter.setDelete(isChecked);
+                teamsAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void initAddTeamButton() {
+        Button btnAddTeam = findViewById(R.id.btnAddTeam);
+        btnAddTeam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TeamsListActivity.this, TeamsEditActivity.class);
+                intent.putExtra("teamid", -1);
+                Log.d(TAG, "onClick: " );
+                startActivity(intent);
+            }
+        });
+    }
+
+    
 
     private void RebindTeams() {
         // Rebind the RecyclerView
@@ -57,6 +103,7 @@ public class TeamsListActivity extends AppCompatActivity {
         teamList.setLayoutManager(layoutManager);
         teamsAdapter = new TeamsAdapter(teams, this);
         teamsAdapter.setOnItemClickListener(onClickListener);
+        teamsAdapter.setOnItemCheckedChangedListener(onCheckedChangeListener);
         teamList.setAdapter(teamsAdapter);
 
     }
