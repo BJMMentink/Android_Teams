@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -96,7 +97,7 @@ public class  TeamsAdapter extends RecyclerView.Adapter {
         TeamViewHolder teamViewHolder = (TeamViewHolder) holder;
         teamViewHolder.getName().setText(teamData.get(position).getName());
         teamViewHolder.getCity().setText(teamData.get(position).getCity());
-        teamViewHolder.getChkFavorite().setChecked(teamData.get(position).isFavorite());
+        teamViewHolder.getChkFavorite().setChecked(teamData.get(position).getIsFavorite());
         teamViewHolder.getImgButtonPhoto().setImageResource(teamData.get(position).getImgId());
         if (isDeleting) {
             teamViewHolder.getBtnDelete().setVisibility(View.VISIBLE);
@@ -109,7 +110,7 @@ public class  TeamsAdapter extends RecyclerView.Adapter {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.d(TAG, "onCheckedChanged: ");
                 //favoriteChanged(isChecked);
-                //onItemCheckedChangeListener.onCheckedChanged(buttonView, isChecked);
+                onItemCheckedChangeListener.onCheckedChanged(buttonView, isChecked);
             }
         });
         // Add a click lister for btnDelete
@@ -129,7 +130,10 @@ public class  TeamsAdapter extends RecyclerView.Adapter {
     }
 
     private void deleteItem(int position) {
-
+        Log.d(TAG, "deleteItem: " + position);
+        teamData.remove(position);
+        //FileIO.writeFile(TeamsListActivity.FILENAME, (AppCompatActivity) parentContext.getApplicationContext(), TeamsListActivity.createDataArray(teamData));
+        notifyDataSetChanged();
     }
 
     @Override

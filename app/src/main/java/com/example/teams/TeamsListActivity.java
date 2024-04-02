@@ -40,9 +40,9 @@ public class TeamsListActivity extends AppCompatActivity {
             Log.d(TAG, "onCheckedChanged: " + isChecked);
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) buttonView.getTag();
             int position = viewHolder.getAdapterPosition();
-            teams.get(position).setFavorite(isChecked);
+            teams.get(position).setIsFavorite(isChecked);
 
-            //teams.remove(teams.get(position));
+            teams.remove(teams.get(position));
             FileIO.writeFile(TeamsListActivity.FILENAME, TeamsListActivity.this, createDataArray(teams));
         }
     };
@@ -56,16 +56,25 @@ public class TeamsListActivity extends AppCompatActivity {
         Navbar.initMapButton(this);
         this.setTitle("List");
         teams = new ArrayList<Team>();
+        initDatabase();
 
-        teams = readTeams(this);
-        if(teams.size() == 0)
-            createTeams();
+        //teams = readTeams(this);
+        //if(teams.size() == 0)
+        //createTeams();
 
         initDeleteSwitch();
         initAddTeamButton();
         
 
         RebindTeams();
+    }
+
+    private void initDatabase() {
+        TeamsDataSource ds = new TeamsDataSource(this);
+        ds.open(true);
+        teams = ds.get();
+
+        Log.d(TAG, "initDatabase: " + teams.size());
     }
 
     private void initDeleteSwitch() {
