@@ -21,8 +21,10 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
     Team team;
     boolean loading = true;
     int teamId = -1;
+
     ArrayList<Team> teams;
-    
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,13 +39,13 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
 
         if(teamId != -1)
         {
-            team.setId(teams.get(teams.size() - 1).getId() + 1);
+            // Get the team
             initTeam(teamId);
-
         }
         else {
             team = new Team();
         }
+
         Navbar.initListButton(this);
         Navbar.initSettingsButton(this);
         Navbar.initMapButton(this);
@@ -51,35 +53,49 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
         initRatingButton();
         initToggleButton();
         initSaveButton();
+
         initTextChanged(R.id.etName);
         initTextChanged(R.id.etCity);
         initTextChanged(R.id.editCell);
 
-        // get the teams
-        teams = TeamsListActivity.readTeams(this);
+        // Get the teams
+        //teams = TeamsListActivity.readTeams(this);
 
-        setForEditing(false);
+        setForEditting(false);
         Log.d(TAG, "onCreate: End");
     }
 
     private void initSaveButton() {
         Button btnSave = findViewById(R.id.btnSave);
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (teamId == -1){
+                TeamsDataSource ds = new TeamsDataSource(TeamsEditActivity.this);
+                ds.open();
+                teams = ds.get();
+                if(teamId == -1)
+                {
+                    Log.d(TAG, "onClick: " + team.toString());
+                    team.setId(teams.get(teams.size()-1).getId() + 1);
                     teams.add(team);
-                }else {
-                    teams.set(teamId - 1, team);
+                    ds.insert(team);
                 }
-                FileIO.writeFile(TeamsListActivity.FILENAME, TeamsEditActivity.this, TeamsListActivity.createDataArray(teams));
+                else {
+                    initTeam(teamId);
+                    //teams.set(teamId, team);
+                    ds.update(team);
+                }
+                //FileIO.writeFile(TeamsListActivity.FILENAME,
+                //          TeamsEditActivity.this,
+                //                 TeamsListActivity.createDataArray(teams));
             }
         });
     }
 
-    private void initTextChanged(int controlId){
+    private void initTextChanged(int controlId)
+    {
         EditText editText = findViewById(controlId);
-
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -98,17 +114,20 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
             }
         });
     }
+
     private void initToggleButton() {
         ToggleButton toggleButton = findViewById(R.id.toggleButtonEdit);
+
         toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setForEditing(toggleButton.isChecked());
+                setForEditting(toggleButton.isChecked());
             }
         });
+
     }
 
-    private void setForEditing(boolean checked) {
+    private void setForEditting(boolean checked) {
         EditText editName = findViewById(R.id.etName);
         EditText editCity = findViewById(R.id.etCity);
         EditText editCellPhone = findViewById(R.id.editCell);
@@ -119,9 +138,11 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
         editCellPhone.setEnabled(checked);
         btnRating.setEnabled(checked);
 
-        if(checked){
-          editName.requestFocus();
-        }else {
+        if(checked) {
+            // Set Focus to the editName
+            editName.requestFocus();
+        }
+        else {
             ScrollView scrollView = findViewById(R.id.scrollView);
             scrollView.fullScroll(ScrollView.FOCUS_UP);
         }
@@ -129,10 +150,17 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
 
     private void initTeam(int teamId) {
 
+        // Get the teams
+        //teams = TeamsListActivity.readTeams(this);
+        // Get the team
+        //team = teams.get(teamId);
+        Log.d(TAG, "initTeam: " + teamId);
+        TeamsDataSource ds = new TeamsDataSource(TeamsEditActivity.this);
+        teams = ds.get();
+        team = ds.get(teamId);
 
-        // get the team
-        team = teams.get(teamId - 1);
         rebindTeam();
+
     }
 
     private void rebindTeam() {
@@ -140,7 +168,6 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
         EditText editCity = findViewById(R.id.etCity);
         EditText editCellPhone = findViewById(R.id.editCell);
         TextView editRating = findViewById(R.id.txtRating);
-
 
         editName.setText(team.getName());
         editCity.setText(team.getCity());
@@ -166,11 +193,9 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
     @Override
     public void didFinishTeamRaterDialog(float rating) {
         Log.d(TAG, "didFinishTeamRaterDialog: " + rating);
-        /*team.setRating(rating);
-        rebindTeam();*/
-
         TextView txtRating = findViewById(R.id.txtRating);
         txtRating.setText(String.valueOf(rating));
         team.setRating(rating);
+
     }
 }
