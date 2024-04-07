@@ -214,6 +214,7 @@ public class TeamsDataSource {
 
         try{
             ContentValues values = new ContentValues();
+            values.put("id", team.getId());
             values.put("name", team.getName());
             values.put("city", team.getCity());
             values.put("imgId", team.getImgId());

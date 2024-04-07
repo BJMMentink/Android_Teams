@@ -82,8 +82,8 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
                     ds.insert(team);
                 }
                 else {
-                    initTeam(teamId);
-                    //teams.set(teamId, team);
+                    //int index = teams.indexOf(team);
+                    //teams.set(index, team);
                     ds.update(team);
                 }
                 //FileIO.writeFile(TeamsListActivity.FILENAME,
