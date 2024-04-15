@@ -73,17 +73,16 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
             public void onClick(View v) {
                 TeamsDataSource ds = new TeamsDataSource(TeamsEditActivity.this);
                 ds.open();
-                teams = ds.get();
+                teams = ds.get("id", "ASC");
                 if(teamId == -1)
                 {
                     Log.d(TAG, "onClick: " + team.toString());
-                    team.setId(teams.get(teams.size()-1).getId() + 1);
+                    //team.setId(teams.get(teams.size()-1).getId() + 1);
+                    team.setId(ds.getNewId());
                     teams.add(team);
                     ds.insert(team);
                 }
                 else {
-                    //int index = teams.indexOf(team);
-                    //teams.set(index, team);
                     ds.update(team);
                 }
                 //FileIO.writeFile(TeamsListActivity.FILENAME,
@@ -156,7 +155,7 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
         //team = teams.get(teamId);
         Log.d(TAG, "initTeam: " + teamId);
         TeamsDataSource ds = new TeamsDataSource(TeamsEditActivity.this);
-        teams = ds.get();
+        //teams = ds.get("Name", "ASC");
         team = ds.get(teamId);
 
         rebindTeam();
