@@ -108,6 +108,9 @@ public class  TeamsAdapter extends RecyclerView.Adapter {
         teamViewHolder.getChkFavorite().setChecked(teamData.get(position).getIsFavorite());
         teamViewHolder.getImageButtonPhoto().setImageResource(teamData.get(position).getImgId());
 
+        if(teamData.get(position).getPhoto() != null)
+            teamViewHolder.getImageButtonPhoto().setImageBitmap(teamData.get(position).getPhoto());
+
         if(isDeleting)
             teamViewHolder.getBtnDelete().setVisibility(View.VISIBLE);
         else
@@ -146,13 +149,20 @@ public class  TeamsAdapter extends RecyclerView.Adapter {
         //                TeamsListActivity.createDataArray(teamData));
         //                TeamsListActivity.createDataArray(teamData));
         //                notifyDataSetChanged();
-
+        RestClient.execDeleteRequest(team, parentContext.getString(R.string.https_fvtcdp_azurewebsites_net_api_team) + team.getId(), parentContext, new VolleyCallback() {
+            @Override
+            public void onSuccess(ArrayList<Team> results) {
+                teamData.remove(team);
+                notifyDataSetChanged();
+                Log.d(TAG, "onSuccess: " + team.getId());
+            }
+        });
         Log.d(TAG, "deleteItem: parentContext: " + parentContext);
-        TeamsDataSource ds = new TeamsDataSource(parentContext);
+        //TeamsDataSource ds = new TeamsDataSource(parentContext);
         Log.d(TAG, "deleteItem: " + team.toString());
-        boolean didDelete = ds.delete(team) > 0;
-        Log.d(TAG, "deleteItem: " + didDelete);
-        notifyDataSetChanged();
+        //boolean didDelete = ds.delete(team) > 0;
+        //Log.d(TAG, "deleteItem: " + didDelete);
+
 
     }
 

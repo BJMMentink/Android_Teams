@@ -22,4 +22,5 @@
     <string name="ascending">Ascending</string>
     <string name="descending">Descending</string>
     <string name="team_settings">Settings\n</string>
+    <string name="https_fvtcdp_azurewebsites_net_api_team">https://fvtcdp.azurewebsites.net/api/Team/</string>
 </resources>

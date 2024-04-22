@@ -66,12 +66,13 @@ public class TeamsListActivity extends AppCompatActivity {
         this.setTitle("List");
         teams = new ArrayList<Team>();
 
-        initDatabase();
+        readFromAPI();
+        //initDatabase();
 
         //teams = readTeams(this);
-        if(teams.size() == 0) {
+        //if(teams.size() == 0) {
             createTeams();
-        }
+        //}
 
         initDeleteSwitch();
         initAddTeamButton();
@@ -147,6 +148,21 @@ public class TeamsListActivity extends AppCompatActivity {
         Log.d(TAG, "createTeams: End: " + teams.size());
     }
 
+    private void readFromAPI(){
+        try {
+            Log.d(TAG, "readFromAPI: Start API");
+            RestClient.execGetRequest(getString(R.string.https_fvtcdp_azurewebsites_net_api_team), this, new VolleyCallback() {
+                @Override
+                public void onSuccess(ArrayList<Team> results) {
+                    Log.d(TAG, "onSuccess: Got here");
+                    teams = results;
+                    RebindTeams();
+                }
+            });
+        }catch (Exception e){
+            Log.e(TAG, "readFromAPI: Error " + e.getMessage());
+        }
+    }
     public static ArrayList<Team> readTeams(AppCompatActivity activity) {
         ArrayList<String> strData = FileIO.readFile(FILENAME, activity);
         ArrayList<Team> teams = new ArrayList<Team>();

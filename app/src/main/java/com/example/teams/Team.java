@@ -1,5 +1,7 @@
 package com.example.teams;
 
+import android.graphics.Bitmap;
+
 public class Team {
     private int id;
     private String name;
@@ -66,6 +68,16 @@ public class Team {
         isFavorite = favorite;
     }
 
+    public Bitmap getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(Bitmap photo) {
+        this.photo = photo;
+    }
+
+    private Bitmap photo;
+
     public Team()
     {
         this.id = -1;
@@ -94,11 +106,21 @@ public class Team {
         this.isFavorite = isFavorite;
     }
 
-    public void setControlText(int controlId, String value){
-        if (controlId == R.id.etName){ this.setName(value); }
-        else if (controlId == R.id.etCity){ this.setCity(value); }
-        else{ this.setCellPhone(value); }
+    public void setControlText(int controlId, String value)
+    {
+        if(controlId == R.id.etName)
+        {
+            this.setName(value);
+        } else if (controlId == R.id.etCity) {
+            this.setCity(value);
+        }
+        else
+        {
+            this.setCellPhone(value);
+        }
+
     }
+
     @Override
     public String toString()
     {
